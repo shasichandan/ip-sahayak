@@ -10,8 +10,8 @@ import {
 
 export const MobileBottomNav: React.FC = () => {
   const tabs = [
-    { path: '/dashboard', label: 'Home', icon: Home },
     { path: '/assistant', label: 'AI Health', icon: Bot, isHighlighted: true },
+    { path: '/dashboard', label: 'Home', icon: Home },
     { path: '/doctors', label: 'Consult', icon: Stethoscope },
     { path: '/medicines', label: 'Store', icon: ShoppingBag }
   ];

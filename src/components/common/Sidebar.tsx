@@ -27,8 +27,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile })
   const navigate = useNavigate();
 
   const mainNavItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: Home },
     { path: '/assistant', label: 'AI Health Assistant', icon: Bot },
+    { path: '/dashboard', label: 'Dashboard', icon: Home },
     { path: '/doctors', label: 'Consult Doctor', icon: Stethoscope },
     { path: '/appointments', label: 'Appointments', icon: Calendar },
     { path: '/prescriptions', label: 'Prescriptions', icon: FileText },

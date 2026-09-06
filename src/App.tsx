@@ -23,8 +23,8 @@ const AppContent: React.FC = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/assistant" replace />} />
+        <Route path="/login" element={<Navigate to="/assistant" replace />} />
         
         <Route path="/dashboard" element={<AppShell><MainDashboard /></AppShell>} />
         <Route path="/assistant" element={<AppShell><AIAssistant /></AppShell>} />
