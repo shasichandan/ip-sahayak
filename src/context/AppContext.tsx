@@ -30,8 +30,6 @@ export interface ToastNotification {
 }
 
 interface AppContextType {
-  role: UserRole;
-  setRole: (role: UserRole) => void;
   currentUser: UserProfile;
   language: LanguageCode;
   setLanguage: (lang: LanguageCode) => void;
@@ -66,7 +64,6 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [role, setRoleState] = useState<UserRole>('patient');
   const [language, setLanguage] = useState<LanguageCode>('en');
   const [cart, setCart] = useState<CartItem[]>([
     {
@@ -95,12 +92,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   ]);
 
-  const currentUser = mockUsers[role];
-
-  const setRole = (newRole: UserRole) => {
-    setRoleState(newRole);
-    showToast(`Switched workspace to ${newRole.toUpperCase()}`, `Active user: ${mockUsers[newRole].name}`, 'info');
-  };
+  const currentUser = mockUsers['patient'];
 
   const t = (key: keyof Translations): string => {
     return translations[language]?.[key] || translations.en[key] || String(key);
@@ -280,8 +272,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   return (
     <AppContext.Provider
       value={{
-        role,
-        setRole,
         currentUser,
         language,
         setLanguage,

@@ -7,11 +7,15 @@ import { GlobalSearchModal } from './GlobalSearchModal';
 import { SourceChainModal } from './SourceChainModal';
 import { ToastContainer } from './ToastContainer';
 
-export const AppShell: React.FC = () => {
+interface AppShellProps {
+  children?: React.ReactNode;
+}
+
+export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-stone-50/60 flex flex-col font-sans text-stone-900">
+    <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
       {/* Global Sidebar (Desktop persistent, Mobile drawer) */}
       <Sidebar
         isMobileOpen={isMobileMenuOpen}
@@ -19,13 +23,13 @@ export const AppShell: React.FC = () => {
       />
 
       {/* Main Layout Area */}
-      <div className="flex-1 flex flex-col lg:pl-64 transition-all">
+      <div className="flex-1 flex flex-col lg:pl-[280px] transition-all duration-300 ease-in-out">
         {/* Top Navbar */}
         <TopNavbar onToggleMobileMenu={() => setIsMobileMenuOpen(true)} />
 
         {/* Page Content Container */}
-        <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-7xl w-full mx-auto pb-24 lg:pb-12">
-          <Outlet />
+        <main className="flex-1 p-4 sm:p-6 md:p-8 w-full mx-auto pb-24 lg:pb-12 max-w-[1440px]">
+          {children ?? <Outlet />}
         </main>
       </div>
 
