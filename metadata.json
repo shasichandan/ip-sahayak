@@ -1,0 +1,6 @@
+{
+  "name": "IP-SAKTI SAHAYAK",
+  "description": "Your AI-powered Ayurveda care & knowledge ecosystem connecting patients, vaidyas, and pharmacies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
