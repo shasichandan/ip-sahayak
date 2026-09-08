@@ -22,9 +22,9 @@ export const SourceChainModal: React.FC = () => {
             <ScrollText className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-stone-900">Source Traceability Chain</h3>
+            <h3 className="text-lg font-bold text-stone-900">Statutory Source Traceability Chain</h3>
             <p className="text-xs text-stone-500">
-              Verified clinical & traditional provenance protocol (Ayurveda RAG v2.4)
+              Verified legal & traditional knowledge provenance protocol (Ayurveda Legal RAG v3.0)
             </p>
           </div>
         </div>
@@ -35,7 +35,7 @@ export const SourceChainModal: React.FC = () => {
           <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200">
             <div className="text-[11px] uppercase tracking-wider font-semibold text-emerald-700 mb-1 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Step 1: AI Synthesis Claim
+              Step 1: AI Legal Synthesis Claim
             </div>
             <p className="text-sm font-medium text-stone-800">
               "{inspectSourceChain.claim}"
@@ -50,7 +50,7 @@ export const SourceChainModal: React.FC = () => {
           <div className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200">
             <div className="text-[11px] uppercase tracking-wider font-semibold text-emerald-800 mb-1 flex items-center gap-1.5">
               <BookOpen className="w-3.5 h-3.5 text-emerald-700" />
-              Step 2: Primary Classical Corpus / Index
+              Step 2: Primary Statutory Act / TKDL Corpus
             </div>
             <p className="text-sm font-bold text-stone-900">
               {inspectSourceChain.source}
@@ -64,13 +64,13 @@ export const SourceChainModal: React.FC = () => {
           {/* Step 3: Document & Section */}
           <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200">
             <div className="text-[11px] uppercase tracking-wider font-semibold text-stone-600 mb-1">
-              Step 3: Classical Document & Exact Sthana/Adhyaya
+              Step 3: Statutory Section / Classical Samhita Provision
             </div>
             <p className="text-sm font-semibold text-stone-900">
               {inspectSourceChain.document}
             </p>
             <p className="text-xs text-stone-600 mt-0.5 font-mono">
-              Reference: {inspectSourceChain.section}
+              Citation: {inspectSourceChain.section}
             </p>
           </div>
 

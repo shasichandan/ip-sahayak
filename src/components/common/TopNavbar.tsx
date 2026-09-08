@@ -72,10 +72,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onToggleMobileMenu }) => {
 
           {/* Right Controls */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Location selector */}
-            <div className="hidden md:flex items-center gap-1.5 text-xs text-stone-600 px-2.5 py-1.5 rounded-lg bg-stone-50 border border-stone-200/60">
-              <MapPin className="w-3.5 h-3.5 text-emerald-700" />
-              <span className="font-medium truncate max-w-[120px]">{currentUser.location || 'Bengaluru, KA'}</span>
+            {/* Mode & Jurisdiction Badge */}
+            <div className="hidden md:flex items-center gap-1.5 text-xs text-stone-700 px-2.5 py-1.5 rounded-lg bg-emerald-50/80 border border-emerald-200">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              <span className="font-bold text-[11px] text-emerald-900 truncate">IP & Regulatory Mode</span>
             </div>
 
             {/* Prominent Multilingual Selector */}

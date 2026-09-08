@@ -23,15 +23,30 @@ export interface UserProfile {
 
 export type ConfidenceLevel = 'high' | 'moderate' | 'low';
 
+export type IPRegimeType = 
+  | 'patent' 
+  | 'trademark' 
+  | 'gi' 
+  | 'copyright' 
+  | 'design' 
+  | 'trade_secret' 
+  | 'plant_variety' 
+  | 'tkdl' 
+  | 'abs' 
+  | 'drug_regulation';
+
 export interface SourceCitation {
   id: string;
-  type: 'classical_text' | 'government_source' | 'research_study' | 'regulatory_doc' | 'tkdl';
+  type: 'classical_text' | 'government_source' | 'research_study' | 'regulatory_doc' | 'tkdl' | 'patent_law' | 'biodiversity_act';
   title: string;
   section: string;
   pageOrChapter?: string;
   authority: string;
   referenceUrl?: string;
   excerpt: string;
+  relevanceScore?: number;
+  date?: string;
+  category?: string;
 }
 
 export interface AISourceChain {
@@ -43,6 +58,14 @@ export interface AISourceChain {
   confidence: ConfidenceLevel;
 }
 
+export interface IPRegimeItem {
+  regime: string;
+  relevance: 'HIGH' | 'MEDIUM' | 'LOW' | 'REVIEW REQUIRED' | 'RELEVANT';
+  badgeColor?: string;
+  reason?: string;
+  action?: string;
+}
+
 export interface AIMessage {
   id: string;
   sender: 'user' | 'assistant';
@@ -50,15 +73,47 @@ export interface AIMessage {
   text: string;
   language?: LanguageCode;
   structuredResponse?: {
+    // Legacy support
     ayurvedicPerspective?: string;
     generalInfo?: string;
     safetyConsiderations?: string;
     whenToConsult?: string;
-    sources: SourceCitation[];
-    confidence: ConfidenceLevel;
-    confidenceReason: string;
     isRedFlag?: boolean;
     redFlagMessage?: string;
+    
+    // IP-SAKTI Sahayak IP & Regulatory Architecture
+    summary?: string;
+    relevantRegimes?: IPRegimeItem[];
+    patentability?: {
+      status: string;
+      analysis: string;
+      section3pFlag: boolean;
+      noveltyAssessment?: string;
+      priorArtImpact?: string;
+    };
+    traditionalKnowledge?: {
+      matchFound: boolean;
+      tkdlRecord?: string;
+      classicalReference?: string;
+      priorArtImplication: string;
+    };
+    regulatoryClassification?: {
+      category: string;
+      pathway: string;
+      rule158BNote: string;
+    };
+    absConsiderations?: {
+      nbaApprovalRequired: boolean;
+      details: string;
+      legalAct: string;
+      sbbRequirement?: string;
+    };
+    recommendedNextSteps?: string[];
+    sources: SourceCitation[];
+    confidence: ConfidenceLevel;
+    confidenceScore?: number;
+    confidenceReason: string;
+    supportedClaimsRatio?: string;
   };
 }
 
