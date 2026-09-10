@@ -14,12 +14,42 @@ from app.schemas.chat import (
     ConversationSummary,
     FeedbackCreate,
     MessageOut,
+    PublicChatRequest,
+    PublicChatResponse,
 )
 from app.middleware.ratelimit import chat_rate_limit_dep
 from app.services.guardrails import ABSTENTION_RESPONSE, is_out_of_scope
 from app.services.rag.loader import get_rag_engine
 
 router = APIRouter(tags=["chat"], dependencies=[Depends(chat_rate_limit_dep)])
+
+
+@router.post("/chat/query", response_model=PublicChatResponse)
+async def public_chat_query(payload: PublicChatRequest) -> PublicChatResponse:
+    """Public prototype endpoint for Indian IPR RAG queries.
+    Does not require JWT auth; tracks multi-turn session memory via session_id.
+    """
+    engine = get_rag_engine()
+    structured = await engine.answer(
+        query=payload.message,
+        jurisdiction=payload.jurisdiction,
+        language=payload.language or "en",
+        session_id=payload.session_id or "default_session",
+    )
+    answer_text = structured.get("summary") or structured.get("answer", "")
+    detected_lang = structured.get("detected_language") or payload.language or "en"
+    return PublicChatResponse(
+        answer=answer_text,
+        language=detected_lang,
+        language_name=structured.get("language_name"),
+        source=structured.get("source", "rag"),
+        sources=structured.get("sources", []),
+        retrieved_chunks=structured.get("retrieved_chunks_count", 0),
+        confidence=structured.get("confidence", "high"),
+        confidenceScore=structured.get("confidenceScore", 85),
+        structuredResponse=structured,
+    )
+
 
 HISTORY_LIMIT = 10
 

@@ -2,6 +2,8 @@ export type UserRole = 'user' | 'patient' | 'doctor' | 'pharmacy';
 
 export type LanguageCode = 'en' | 'te' | 'hi';
 
+export type DetectedLanguageCode = 'en' | 'te' | 'hi' | 'ta' | 'kn' | 'ml' | 'mr' | 'bn' | (string & {});
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -71,7 +73,7 @@ export interface AIMessage {
   sender: 'user' | 'assistant';
   timestamp: string;
   text: string;
-  language?: LanguageCode;
+  language?: DetectedLanguageCode;
   structuredResponse?: {
     // Legacy support
     ayurvedicPerspective?: string;
@@ -115,6 +117,11 @@ export interface AIMessage {
     confidenceScore?: number;
     confidenceReason: string;
     supportedClaimsRatio?: string;
+    detectedLanguage?: string;
+    languageName?: string;
+    retrievedChunksCount?: number;
+    isRAG?: boolean;
+    source?: 'rag' | 'llm' | 'small_talk' | string;
   };
 }
 

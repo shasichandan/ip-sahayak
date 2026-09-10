@@ -1,0 +1,21 @@
+Document Name: Trade_Mark_Filing_FAQ.txt
+Authority: Trade Marks Registry (TMR), Mumbai / Delhi / Kolkata / Chennai / Ahmedabad
+Category: Trademark
+Section: Trademark Application and Registration FAQs
+
+Q1: What is a Trademark in India?
+A trademark is a visual symbol in the form of a word, logo, name, device, label, numeral, or combination of colours used by one enterprise to distinguish its goods or services from those of competitors. It is governed by the Trade Marks Act 1999.
+
+Q2: How long does a trademark last in India?
+A registered trademark in India is valid for 10 years from the date of filing. It can be renewed indefinitely every 10 years by filing Form TM-R with the statutory renewal fee.
+
+Q3: What are Nice Classes?
+The Nice Classification classifies trademarks into 45 classes: Classes 1 to 34 are for goods (e.g. Class 5 for pharmaceuticals and dietary supplements), and Classes 35 to 45 are for services (e.g. Class 35 for advertising and retail, Class 42 for technology and software services).
+
+Q4: What is the procedure for registering a trademark?
+1. Conduct a trademark clearance search on public IPO registry.
+2. File Form TM-A with user date affidavit if mark is already in use.
+3. Overcome Examination Report objections under Section 9 (distinctiveness) and Section 11 (conflict) within 30 days.
+4. Publication in the weekly Trade Marks Journal.
+5. 4-month opposition period.
+6. Issuance of registration certificate with the (R) registered symbol.

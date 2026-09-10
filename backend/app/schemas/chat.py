@@ -59,3 +59,23 @@ class ChatResponse(BaseModel):
 class FeedbackCreate(BaseModel):
     rating: Literal["up", "down"]
     comment: str | None = Field(default=None, max_length=2000)
+
+
+class PublicChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=8000)
+    session_id: str | None = Field(default="default_session", description="Optional conversation session ID")
+    language: str | None = Field(default="en", description="Optional ISO language code")
+    jurisdiction: Literal["india", "international"] = "india"
+
+
+class PublicChatResponse(BaseModel):
+    answer: str
+    language: str
+    language_name: str | None = None
+    source: str | None = "rag"
+    sources: list[dict[str, Any]] = []
+    retrieved_chunks: int = 0
+    confidence: str | None = "high"
+    confidenceScore: int | None = 85
+    structuredResponse: dict[str, Any] | None = None
+
