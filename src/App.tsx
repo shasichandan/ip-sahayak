@@ -33,9 +33,10 @@ const AppContent: React.FC = () => {
     <>
       <Routes>
         {/* PRIMARY LANDING EXPERIENCE: AI CHATBOT FIRST */}
-        <Route path="/" element={<Navigate to="/assistant" replace />} />
-        <Route path="/login" element={<Navigate to="/assistant" replace />} />
-        <Route path="/assistant" element={<AppShell><AIAssistant /></AppShell>} />
+        <Route path="/" element={<Navigate to="/chatbot" replace />} />
+        <Route path="/login" element={<Navigate to="/chatbot" replace />} />
+        <Route path="/chatbot" element={<AppShell><AIAssistant /></AppShell>} />
+        <Route path="/assistant" element={<Navigate to="/chatbot" replace />} />
 
         {/* SIH26045 Dedicated Analysis & Research Routes */}
         <Route path="/formulation-analysis" element={<AppShell><FormulationAnalysisView /></AppShell>} />
@@ -70,7 +71,7 @@ const AppContent: React.FC = () => {
           </div>
         </div></AppShell>} />
 
-        <Route path="*" element={<Navigate to="/assistant" replace />} />
+        <Route path="*" element={<Navigate to="/chatbot" replace />} />
       </Routes>
 
       <GlobalSearchModal />

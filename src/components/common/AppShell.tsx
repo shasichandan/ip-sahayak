@@ -6,6 +6,7 @@ import { MobileBottomNav } from './MobileBottomNav';
 import { GlobalSearchModal } from './GlobalSearchModal';
 import { SourceChainModal } from './SourceChainModal';
 import { ToastContainer } from './ToastContainer';
+import { BackButton } from './BackButton';
 
 interface AppShellProps {
   children?: React.ReactNode;
@@ -29,6 +30,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
         {/* Page Content Container */}
         <main className="flex-1 p-4 sm:p-6 md:p-8 w-full mx-auto pb-24 lg:pb-12 max-w-[1440px]">
+          <BackButton />
           {children ?? <Outlet />}
         </main>
       </div>

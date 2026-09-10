@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import {
+  Bot,
   Scale,
   Layers3,
   BookOpen,
@@ -39,6 +40,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile })
 
   const [isRegimesOpen, setIsRegimesOpen] = useState(true);
   const [isClinicalOpen, setIsClinicalOpen] = useState(false);
+
+  const isChatbotActive = location.pathname === '/chatbot' || location.pathname === '/assistant' || location.pathname === '/';
 
   // Sub-items for IP Regime Analysis
   const ipRegimeSubItems = [
@@ -89,6 +92,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile })
         {/* Navigation Content */}
         <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-8 text-[14px] font-medium">
           
+          {/* AI Chatbot Navigation Item */}
+          <div className="space-y-1">
+            <NavLink
+              to="/chatbot"
+              onClick={onCloseMobile}
+              className={() =>
+                `flex items-center gap-3 rounded-lg px-2 py-2 transition-all ${
+                  isChatbotActive
+                    ? 'bg-stone-50 text-emerald-900 font-semibold'
+                    : 'text-stone-700 hover:bg-stone-50'
+                }`
+              }
+            >
+              <Bot className={`h-[18px] w-[18px] ${isChatbotActive ? 'text-emerald-700' : 'text-stone-400'}`} />
+              <span>AI Chatbot</span>
+            </NavLink>
+          </div>
+
           {/* SECTION 1: ANALYSIS & PROTECTION */}
           <div>
             <div className="px-2 mb-3 text-[11px] font-bold text-stone-400 uppercase tracking-[0.06em]">
