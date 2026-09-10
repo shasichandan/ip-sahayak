@@ -34,7 +34,7 @@ export const PatientDashboard: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight flex items-center gap-2">
-            Good morning, Anjali <span className="text-emerald-700">🌿</span>
+            Good morning, User <span className="text-emerald-700">🌿</span>
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
             Here is your Ayurvedic health and care overview for today.

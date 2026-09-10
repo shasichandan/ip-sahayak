@@ -4,14 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import {
   Search,
   Globe,
-  MapPin,
   Bell,
-  User,
   ChevronDown,
   Menu,
   Check,
-  LogOut,
-  Shield
+  Settings,
+  Scale
 } from 'lucide-react';
 import { LanguageCode } from '../../types';
 import { NotificationDrawer } from './NotificationDrawer';
@@ -22,7 +20,6 @@ interface TopNavbarProps {
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({ onToggleMobileMenu }) => {
   const {
-    currentUser,
     language,
     setLanguage,
     t,
@@ -32,7 +29,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onToggleMobileMenu }) => {
 
   const navigate = useNavigate();
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -47,42 +43,53 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onToggleMobileMenu }) => {
     <>
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-6 py-3 transition-all">
         <div className="flex items-center justify-between gap-3">
-          {/* Left: Mobile hamburger & Search bar */}
-          <div className="flex items-center gap-3 flex-1 max-w-xl">
+          {/* Left: Mobile hamburger & Brand/Search */}
+          <div className="flex items-center gap-3 flex-1 max-w-2xl">
             <button
               onClick={onToggleMobileMenu}
-              className="lg:hidden p-2 rounded-xl text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors"
+              className="lg:hidden p-2 rounded-xl text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors shrink-0"
               aria-label="Open Navigation"
             >
               <Menu className="w-5 h-5" />
             </button>
 
+            {/* Desktop Brand Label in Header */}
+            <div className="hidden sm:flex items-center gap-2 mr-2 shrink-0">
+              <span className="font-black text-sm md:text-base text-stone-900 tracking-tight flex items-center gap-1.5">
+                <Scale className="w-4 h-4 text-emerald-700" />
+                IP-SAKTI
+              </span>
+              <span className="hidden md:inline text-[11px] text-stone-500 font-medium pl-2 border-l border-stone-300">
+                AI-Powered IP & Regulatory Assistant
+              </span>
+            </div>
+
             {/* Omnibar search button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2.5 w-full bg-stone-100/80 hover:bg-stone-100 border border-stone-200/60 rounded-xl px-3.5 py-2.5 text-xs text-stone-500 transition-all text-left group shadow-sm"
+              className="flex items-center gap-2.5 w-full bg-stone-100/80 hover:bg-stone-100 border border-stone-200/60 rounded-xl px-3.5 py-2 text-xs text-stone-500 transition-all text-left group shadow-2xs"
             >
               <Search className="w-4 h-4 text-emerald-700 shrink-0 group-hover:text-emerald-800" />
               <span className="truncate flex-1">{t('searchPlaceholder')}</span>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-stone-400 bg-white rounded-md border border-stone-200 shadow-sm">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-stone-400 bg-white rounded-md border border-stone-200 shadow-2xs">
                 ⌘K
               </kbd>
             </button>
           </div>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            {/* Mode & Jurisdiction Badge */}
-            <div className="hidden md:flex items-center gap-1.5 text-xs text-stone-700 px-2.5 py-1.5 rounded-lg bg-emerald-50/80 border border-emerald-200">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Regulatory Mode Badge */}
+            <div className="hidden lg:flex items-center gap-1.5 text-xs text-stone-700 px-2.5 py-1.5 rounded-lg bg-emerald-50/80 border border-emerald-200">
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-              <span className="font-bold text-[11px] text-emerald-900 truncate">IP & Regulatory Mode</span>
+              <span className="font-bold text-[11px] text-emerald-900 truncate">IPO & TKDL Active</span>
             </div>
 
             {/* Prominent Multilingual Selector */}
             <div className="relative">
               <button
                 onClick={() => setIsLangOpen(!isLangOpen)}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-200 hover:bg-stone-50 text-xs font-semibold text-stone-700 transition-colors shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 hover:bg-stone-50 text-xs font-semibold text-stone-700 transition-colors shadow-2xs"
                 title="Change language (English, Telugu, Hindi)"
               >
                 <Globe className="w-4 h-4 text-emerald-700" />
@@ -117,76 +124,23 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onToggleMobileMenu }) => {
             {/* Notifications Button */}
             <button
               onClick={() => setIsNotifOpen(true)}
-              className="relative p-2 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors shadow-sm"
-              title="Notifications"
+              className="relative p-2 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors shadow-2xs"
+              title="Regulatory & Patent Alerts"
             >
-              <Bell className="w-5 h-5 text-stone-700" />
+              <Bell className="w-4 h-4 text-stone-700" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full ring-2 ring-white animate-pulse" />
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-600 rounded-full ring-2 ring-white animate-pulse" />
               )}
             </button>
 
-            {/* User Profile Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-2 sm:pl-2 p-1 rounded-xl hover:bg-stone-50 transition-colors border border-transparent hover:border-stone-200"
-              >
-                <img
-                  src={currentUser.avatar}
-                  alt={currentUser.name}
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-stone-200 shadow-sm"
-                />
-                <div className="hidden xl:block text-left text-xs leading-tight pr-2">
-                  <p className="font-bold text-stone-900 truncate max-w-[120px]">{currentUser.name}</p>
-                  <p className="text-[10px] text-stone-500">Patient Profile</p>
-                </div>
-              </button>
-
-              {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-stone-200 p-2 z-40 animate-in fade-in zoom-in-95 duration-100">
-                  <div className="p-3 border-b border-stone-100 mb-1">
-                    <p className="text-sm font-bold text-stone-900">{currentUser.name}</p>
-                    <p className="text-xs text-stone-500 mt-0.5">{currentUser.email}</p>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setIsUserMenuOpen(false);
-                      navigate('/settings');
-                    }}
-                    className="w-full px-3 py-2 text-sm text-left rounded-xl text-stone-700 hover:bg-stone-50 flex items-center gap-2 font-medium"
-                  >
-                    <User className="w-4 h-4 text-stone-500" />
-                    Account Settings
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsUserMenuOpen(false);
-                      navigate('/records');
-                    }}
-                    className="w-full px-3 py-2 text-sm text-left rounded-xl text-stone-700 hover:bg-stone-50 flex items-center gap-2 font-medium"
-                  >
-                    <Shield className="w-4 h-4 text-stone-500" />
-                    Health Records
-                  </button>
-
-                  <div className="border-t border-stone-100 mt-1 pt-1">
-                    <button
-                      onClick={() => {
-                        setIsUserMenuOpen(false);
-                        navigate('/login');
-                      }}
-                      className="w-full px-3 py-2 text-sm text-left rounded-xl text-rose-600 hover:bg-rose-50 flex items-center gap-2 font-bold"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+            {/* Settings Button */}
+            <button
+              onClick={() => navigate('/settings')}
+              className="p-2 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors shadow-2xs"
+              title="System & Jurisdiction Settings"
+            >
+              <Settings className="w-4 h-4 text-stone-700" />
+            </button>
           </div>
         </div>
       </header>

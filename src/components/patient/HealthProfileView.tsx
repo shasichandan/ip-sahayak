@@ -72,7 +72,7 @@ export const HealthProfileView: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 pb-6 border-b border-stone-100">
           <img
             src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
-            alt="Anjali Sharma"
+            alt="User"
             className="w-20 h-20 rounded-2xl object-cover border-2 border-emerald-600/30 shadow-xs"
           />
           <div className="text-center sm:text-left flex-1">

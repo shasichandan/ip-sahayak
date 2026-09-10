@@ -1,4 +1,4 @@
-export type UserRole = 'patient' | 'doctor' | 'pharmacy';
+export type UserRole = 'user' | 'patient' | 'doctor' | 'pharmacy';
 
 export type LanguageCode = 'en' | 'te' | 'hi';
 
@@ -108,6 +108,7 @@ export interface AIMessage {
       legalAct: string;
       sbbRequirement?: string;
     };
+    suggestedTools?: { label: string; path: string; reason?: string }[];
     recommendedNextSteps?: string[];
     sources: SourceCitation[];
     confidence: ConfidenceLevel;

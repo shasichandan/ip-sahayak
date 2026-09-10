@@ -171,7 +171,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       doctorName,
       doctorSpecialty: 'Digestive Health & Lifestyle',
       doctorImage: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&auto=format&fit=crop&q=80',
-      patientName: 'Anjali Sharma',
+      patientName: 'Applicant (Self)',
       patientAge: 29,
       date,
       time,

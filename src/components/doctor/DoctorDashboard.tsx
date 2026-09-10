@@ -24,7 +24,7 @@ export const DoctorDashboard: React.FC = () => {
 
   // Active consultation patient state
   const [activePatient, setActivePatient] = useState({
-    name: 'Anjali Sharma',
+    name: 'IP Applicant',
     age: 28,
     gender: 'Female',
     chiefComplaint: 'Chronic hyperacidity (Amlapitta), burning sensation in chest after meals, irregular sleep',
@@ -208,7 +208,7 @@ export const DoctorDashboard: React.FC = () => {
               </h4>
               <div className="space-y-1.5 text-xs">
                 {[
-                  { name: 'Anjali Sharma (Current)', time: '10:30 AM', reason: 'Amlapitta & Insomnia' },
+                  { name: 'IP Applicant (Current)', time: '10:30 AM', reason: 'Amlapitta & Insomnia' },
                   { name: 'Rajesh Verma', time: '11:15 AM', reason: 'Sandhivata (Knee Pain)' },
                   { name: 'Priya Patel', time: '12:00 PM', reason: 'PCOS / Doshic Imbalance' }
                 ].map((pt, idx) => (

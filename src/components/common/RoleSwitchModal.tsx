@@ -27,7 +27,7 @@ export const RoleSwitchModal: React.FC<RoleSwitchModalProps> = ({ isOpen, onClos
     {
       id: 'patient' as UserRole,
       title: 'Patient (Care Seeker)',
-      name: 'Anjali Sharma',
+      name: 'IP-SAKTI User',
       desc: 'Access personal health diary, educational AI Sahayak, prescriptions, nearby pharmacies, and Ayurveda shop.',
       restrictions: 'AI never independently prescribes medicines. Educational guidance only.',
       icon: <Heart className="w-5 h-5 text-emerald-700" />,

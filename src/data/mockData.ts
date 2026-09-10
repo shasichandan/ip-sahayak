@@ -17,12 +17,12 @@ import {
 export const mockUsers: Record<'patient' | 'doctor' | 'pharmacy', UserProfile> = {
   patient: {
     id: 'usr-p-01',
-    name: 'Anjali Sharma',
-    role: 'patient',
-    email: 'anjali.sharma@example.com',
+    name: 'IP-SAKTI User',
+    role: 'user',
+    email: 'user@ip-sakti.gov.in',
     phone: '+91 98450 12345',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-    location: 'Indiranagar, Bengaluru, KA',
+    location: 'New Delhi, India',
     doshaProfile: {
       primary: 'Pitta-Vata (Balanced/Seasonal)',
       vata: 35,
@@ -189,7 +189,7 @@ export const mockAppointments: Appointment[] = [
     doctorName: 'Dr. S. Kumar',
     doctorSpecialty: 'Digestive Health & Lifestyle',
     doctorImage: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&auto=format&fit=crop&q=80',
-    patientName: 'Anjali Sharma',
+    patientName: 'Applicant (Self)',
     patientAge: 29,
     date: 'Tomorrow, Sep 5',
     time: '10:30 AM',
@@ -204,7 +204,7 @@ export const mockAppointments: Appointment[] = [
     doctorName: 'Dr. Priya Nambiar',
     doctorSpecialty: 'Joint & Spine Health',
     doctorImage: 'https://images.unsplash.com/photo-1594824813589-3221b6d17b5f?w=100&auto=format&fit=crop&q=80',
-    patientName: 'Anjali Sharma',
+    patientName: 'Applicant (Self)',
     patientAge: 29,
     date: 'Aug 22, 2026',
     time: '04:00 PM',
@@ -356,7 +356,7 @@ export const mockPrescriptions: Prescription[] = [
     doctorName: 'Dr. S. Kumar',
     doctorTitle: 'BAMS, MD (Ayu) — Reg. No. AYUSH-KA-2012-09844',
     doctorLicense: 'AYUSH-KA-2012-09844',
-    patientName: 'Anjali Sharma',
+    patientName: 'Applicant (Self)',
     patientAge: 29,
     patientGender: 'Female',
     date: 'Sep 02, 2026',
@@ -847,39 +847,39 @@ export const mockCommunityPosts: CommunityPost[] = [
 export const mockNotifications: NotificationItem[] = [
   {
     id: 'notif-01',
-    title: 'Consultation Tomorrow with Dr. S. Kumar',
-    message: 'Your video consultation is scheduled for tomorrow at 10:30 AM. Video link is ready.',
+    title: 'CSIR-TKDL Database Sync Complete',
+    message: 'CSIR-TKDL database updated with 12,000 new formulations cross-referenced to Charaka Samhita & IPC Class A61K 36.',
     timestamp: '10 mins ago',
-    type: 'appointment',
+    type: 'regulatory',
     read: false,
-    actionUrl: '/patient/appointments'
+    actionUrl: '/tkdl'
   },
   {
     id: 'notif-02',
-    title: 'Rx-to-Door Out for Delivery',
-    message: 'Order #ord-9941 containing Triphala & Ashwagandha is on the way from Green Ayurveda.',
+    title: 'IPO Section 3(p) Practice Notice',
+    message: 'Indian Patent Office updated examination guidelines for traditional knowledge objections and synergistic ratios.',
     timestamp: '35 mins ago',
-    type: 'order',
+    type: 'regulatory',
     read: false,
-    actionUrl: '/patient/orders'
+    actionUrl: '/regimes?type=patent'
   },
   {
     id: 'notif-03',
-    title: 'Medicine Batch Authenticated',
-    message: 'Batch TRP-2026-001 verified through AYUSH National Registry records.',
+    title: 'NBA Form III Clearance Guidance',
+    message: 'National Biodiversity Authority approval checklist updated for commercial ASU startups filing IPR applications.',
     timestamp: '2 hours ago',
     type: 'verification',
     read: true,
-    actionUrl: '/patient/verify'
+    actionUrl: '/abs-compliance'
   },
   {
     id: 'notif-04',
-    title: 'Regulatory Alert: Rule 158B Advisory',
-    message: 'Ministry of AYUSH published updated guidelines on ASU proprietary clinical evidence requirements.',
+    title: 'Rule 158B ASU Advisory',
+    message: 'Ministry of AYUSH published updated guidelines on ASU proprietary clinical safety evidence requirements.',
     timestamp: 'Yesterday',
     type: 'regulatory',
     read: true,
-    actionUrl: '/ipr/regulations'
+    actionUrl: '/drug-classification'
   }
 ];
 
@@ -901,7 +901,7 @@ export const mockDoctorPatientQueue = [
   },
   {
     id: 'pt-q-02',
-    name: 'Anjali Sharma',
+    name: 'IP Applicant',
     age: 29,
     gender: 'Female',
     time: '11:15 AM',

@@ -48,14 +48,16 @@ const AppContent: React.FC = () => {
         <Route path="/sources" element={<AppShell><SourceExplorerView /></AppShell>} />
         <Route path="/reports" element={<AppShell><ReportsView /></AppShell>} />
 
-        {/* Existing Functional Views (Clinical & Health Hub) */}
-        <Route path="/dashboard" element={<AppShell><MainDashboard /></AppShell>} />
-        <Route path="/doctors" element={<AppShell><DoctorConsultation /></AppShell>} />
-        <Route path="/appointments" element={<AppShell><AppointmentsView /></AppShell>} />
-        <Route path="/prescriptions" element={<AppShell><PrescriptionsView /></AppShell>} />
+        {/* Formulation Registry */}
         <Route path="/medicines" element={<AppShell><Medicines /></AppShell>} />
-        <Route path="/orders" element={<AppShell><OrdersView /></AppShell>} />
-        <Route path="/records" element={<AppShell><HealthRecords /></AppShell>} />
+
+        {/* Redirect Legacy Clinic/Doctor/Patient Routes to Chatbot */}
+        <Route path="/dashboard" element={<Navigate to="/chatbot" replace />} />
+        <Route path="/doctors" element={<Navigate to="/chatbot" replace />} />
+        <Route path="/appointments" element={<Navigate to="/chatbot" replace />} />
+        <Route path="/prescriptions" element={<Navigate to="/chatbot" replace />} />
+        <Route path="/orders" element={<Navigate to="/chatbot" replace />} />
+        <Route path="/records" element={<Navigate to="/chatbot" replace />} />
 
         {/* System Settings & Help */}
         <Route path="/settings" element={<AppShell><div className="p-8 max-w-4xl mx-auto bg-white rounded-2xl border border-stone-200">

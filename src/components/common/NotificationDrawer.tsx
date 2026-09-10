@@ -37,7 +37,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, 
           <div className="p-4 border-b border-stone-100 flex items-center justify-between bg-stone-50/50">
             <div className="flex items-center gap-2">
               <Bell className="w-4 h-4 text-emerald-800" />
-              <h3 className="text-sm font-bold text-stone-900">Care Notifications</h3>
+              <h3 className="text-sm font-bold text-stone-900">Regulatory & IP Alerts</h3>
               <span className="text-[10px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
                 {notifications.filter(n => !n.read).length} new
               </span>
@@ -80,7 +80,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, 
           </div>
 
           <div className="p-3 border-t border-stone-100 bg-stone-50 text-center text-xs text-stone-500">
-            All notifications synced across mobile & clinic
+            Synced with Ministry of AYUSH & IPO gazettes
           </div>
         </div>
       </div>

@@ -241,7 +241,7 @@ export const AISahayakChat: React.FC = () => {
             <div className="flex items-center gap-1.5 mb-1 text-[11px] text-stone-400 font-medium">
               {msg.sender === 'user' ? (
                 <>
-                  <span>You (Anjali)</span>
+                  <span>You</span>
                   <User className="w-3 h-3" />
                 </>
               ) : (

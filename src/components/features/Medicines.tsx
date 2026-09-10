@@ -43,19 +43,19 @@ export const Medicines: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-            Ayurveda Formulations & Store
+            Ayurvedic Formulations & Botanical Directory
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Verified classical formulations, standardized herbal extracts, and doctor-prescribed preparations.
+            Reference directory of classical formulations, standardized herbal extracts, and commercial ASU products for IP clearance.
           </p>
         </div>
 
         <button
-          onClick={() => navigate('/patient/orders')}
+          onClick={() => navigate('/formulation-analysis')}
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold rounded-xl shadow-xs transition-all self-start sm:self-auto"
         >
-          <ShoppingBag className="w-4 h-4 text-emerald-300" />
-          <span>Prescription Basket ({cart.reduce((s, i) => s + i.quantity, 0)})</span>
+          <Sparkles className="w-4 h-4 text-emerald-300" />
+          <span>Analyze Custom Formulation</span>
         </button>
       </div>
 

@@ -25,7 +25,7 @@ export const PharmacyDashboard: React.FC = () => {
   const [pharmacyOrders, setPharmacyOrders] = useState([
     {
       id: 'ord-9941',
-      patient: 'Anjali Sharma',
+      patient: 'Applicant',
       doctor: 'Dr. S. Kumar',
       rxId: 'rx-2026-091',
       date: 'Today, 10:45 AM',

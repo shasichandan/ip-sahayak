@@ -9,7 +9,7 @@ import {
 
 export const MobileBottomNav: React.FC = () => {
   const tabs = [
-    { path: '/chatbot', label: 'AI Sahayak', icon: Bot, isHighlighted: true },
+    { path: '/chatbot', label: 'AI Chatbot', icon: Bot, isHighlighted: true },
     { path: '/regimes', label: '10 Regimes', icon: Scale },
     { path: '/formulation-analysis', label: 'Formulation', icon: Layers },
     { path: '/tkdl', label: 'TKDL Prior Art', icon: BookOpen }

@@ -24,7 +24,7 @@ export const RoleSelectorLogin: React.FC = () => {
     {
       id: 'patient' as UserRole,
       title: 'Patient',
-      persona: 'Anjali Sharma (29 yrs)',
+      persona: 'IP-SAKTI User',
       headline: 'My health, consultations & medicines',
       description: 'Access educational AI Sahayak in English, Telugu or Hindi, book Vaidyas, track Dosha, and order prescriptions with Rx-to-Door delivery.',
       icon: Heart,

@@ -8,7 +8,6 @@ import {
   Paperclip,
   Sparkles,
   BookOpen,
-  ShieldCheck,
   AlertTriangle,
   Bookmark,
   Share2,
@@ -16,22 +15,19 @@ import {
   ExternalLink,
   ChevronRight,
   User,
-  Info,
   Globe,
-  ScrollText,
   FileCheck,
   Scale,
   Award,
   Shield,
-  FileText,
-  HelpCircle,
   Layers,
   ArrowRight,
   CheckCircle2,
-  AlertCircle
+  Building2,
+  HelpCircle
 } from 'lucide-react';
-import { AIMessage, SourceCitation, ConfidenceLevel, IPRegimeItem } from '../../types';
-import { authoritativeSources, sampleScenarios, ipRegimesList } from '../../data/ipData';
+import { AIMessage, SourceCitation, IPRegimeItem } from '../../types';
+import { authoritativeSources, sampleScenarios } from '../../data/ipData';
 
 export const AIAssistant: React.FC = () => {
   const { language, setLanguage, saveAnswer, showToast, setInspectSourceChain } = useApp();
@@ -41,19 +37,25 @@ export const AIAssistant: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
-  // Initial messages state featuring full IP-SAKTI Sahayak analysis
+  const getWelcomeText = (lang: string) => {
+    if (lang === 'te') {
+      return 'నమస్కారం! నేను IP-SAKTI, మీ AI-ఆధారిత మేధో సంపత్తి (IP) & ఆయుర్వేద నియంత్రణ సహాయకుడిని. ఈరోజు నేను మీకు ఎలా సహాయపడగలను?';
+    }
+    if (lang === 'hi') {
+      return 'नमस्ते! मैं IP-SAKTI हूँ, आपका AI-संचालित बौद्धिक संपदा (IP) एवं आयुर्वेद विनियामक सहायक। आज मैं आपकी क्या सहायता कर सकता हूँ?';
+    }
+    return "Hello! I'm IP-SAKTI, your AI-powered Intellectual Property & Ayurveda Regulatory Assistant. How can I help you today?";
+  };
+
+  // Initial messages state featuring full IP-SAKTI Assistant analysis
   const [messages, setMessages] = useState<AIMessage[]>([
     {
       id: 'msg-ip-01',
       sender: 'assistant',
       timestamp: 'Just now',
-      text: language === 'te' 
-        ? 'నమస్కారం! నేను IP-SAKTI సహాయక్ — ఆయుర్వేద మేధో సంపత్తి (IP), సాంప్రదాయ జ్ఞానం (TKDL), ABS అనుమతులు మరియు ఔషధ నియంత్రణ మార్గదర్శకత్వం కోసం మీ AI అసిస్టెంట్.'
-        : language === 'hi'
-        ? 'नमस्ते! मैं IP-SAKTI सहायक हूँ — आयुर्वेदिक बौद्धिक संपदा (IP), पारंपरिक ज्ञान (TKDL), ABS अनुपालन और औषध विनियामक मार्गदर्शन के लिए आपका समर्पित AI सहायक।'
-        : 'Namaste! I am IP-SAKTI Sahayak — your specialized AI assistant for Ayurvedic intellectual property, traditional knowledge (TKDL), Access & Benefit Sharing (ABS), and regulatory guidance.',
+      text: getWelcomeText(language),
       structuredResponse: {
-        summary: 'IP-SAKTI Sahayak synthesizes statutory legal provisions (Indian Patent Act 1970, Biological Diversity Act 2002, Drugs & Cosmetics Rules 1945) and traditional knowledge corpora (CSIR-TKDL & Classical Samhitas) to deliver transparent, source-cited IP guidance.',
+        summary: 'IP-SAKTI synthesizes statutory legal provisions (Indian Patent Act 1970, Biological Diversity Act 2002, Drugs & Cosmetics Rules 1945) and traditional knowledge corpora (CSIR-TKDL & Classical Samhitas) to deliver transparent, source-cited IP guidance and direct access to specialized analysis tools.',
         relevantRegimes: [
           { regime: 'Patent', relevance: 'HIGH', badgeColor: 'rose', reason: 'Assessing Section 3(p) traditional knowledge bar vs synergistic bio-enhancement' },
           { regime: 'Traditional Knowledge', relevance: 'HIGH', badgeColor: 'amber', reason: 'Cross-referencing 4.5 lakh CSIR-TKDL formulations & Samhita corpora' },
@@ -71,7 +73,7 @@ export const AIAssistant: React.FC = () => {
           matchFound: true,
           tkdlRecord: 'CSIR-TKDL Database (IPC Class A61K 36)',
           classicalReference: 'Charaka Samhita, Sushruta Samhita, and Ashtanga Hridaya',
-          priorArtImplication: 'Classical documentation acts as anticipatory prior art, frequently cited by patent examiners worldwide to revoke natural product patents.'
+          priorArtImplication: 'Classical documentation acts as anticipatory prior art, cited by patent examiners worldwide to prevent wrongful patenting of traditional herbal remedies.'
         },
         regulatoryClassification: {
           category: 'Patent / Proprietary ASU Drug or Classical Medicine',
@@ -83,6 +85,13 @@ export const AIAssistant: React.FC = () => {
           details: 'Any intellectual property application (patent) based on Indian biological resources requires prior written approval from the National Biodiversity Authority (NBA) under Section 6 of the Biological Diversity Act, 2002.',
           legalAct: 'Biological Diversity Act, 2002 (amended 2023), Sections 3, 6, 7'
         },
+        suggestedTools: [
+          { label: 'Formulation Analysis', path: '/formulation-analysis', reason: 'Check your ingredients for novelty, classical references & synergy' },
+          { label: 'IP Regime Analysis', path: '/regimes', reason: 'Explore Patent, Trademark, GI, Design, and Trade Secret regimes' },
+          { label: 'Traditional Knowledge (TKDL)', path: '/tkdl', reason: 'Search 4.5 lakh CSIR-TKDL prior-art formulation entries' },
+          { label: 'ABS Compliance (NBA)', path: '/abs-compliance', reason: 'Verify Form III approval rules under Biodiversity Act' },
+          { label: 'Research & Patents Prior Art', path: '/prior-art', reason: 'Cross-examine global patent databases and journals' }
+        ],
         recommendedNextSteps: [
           'Conduct prior-art cross checks against CSIR-TKDL and classical texts.',
           'Quantify synergism (Combination Index < 0.8) to overcome Section 3(e) objections.',
@@ -99,22 +108,37 @@ export const AIAssistant: React.FC = () => {
           authoritativeSources[6]  // Rule 158B
         ],
         confidence: 'high',
-        confidenceScore: 92,
+        confidenceScore: 94,
         confidenceReason: 'Verified against authoritative statutes (Patents Act 1970, Biological Diversity Act 2002) and CSIR-TKDL pharmacopoeia.',
         supportedClaimsRatio: '6/6 claims verified'
       }
     }
   ]);
 
-  // Quick Action cards specified in SIH requirements
+  // Update initial welcome message when language changes if it's the default welcome
+  useEffect(() => {
+    setMessages(prev => {
+      if (prev.length > 0 && prev[0].id === 'msg-ip-01') {
+        const updated = [...prev];
+        updated[0] = {
+          ...updated[0],
+          text: getWelcomeText(language)
+        };
+        return updated;
+      }
+      return prev;
+    });
+  }, [language]);
+
+  // Quick Action cards specified in SIH & user requirements
   const quickActions = [
     {
       id: 'qa-formulation',
       title: 'Analyze Formulation',
-      desc: 'Novelty, classical references & IP barriers',
+      desc: 'Novelty, classical shlokas & IP barriers',
       icon: Layers,
       color: 'emerald',
-      prompt: 'I developed a new Ayurvedic formulation combining Ashwagandha, Turmeric, and Black Pepper extract for chronic inflammatory distress. Can I patent it?'
+      prompt: 'Analyze the IP protection options for my Ayurvedic formulation'
     },
     {
       id: 'qa-patentability',
@@ -122,49 +146,51 @@ export const AIAssistant: React.FC = () => {
       desc: 'Section 3(p) non-patentability & inventive step',
       icon: Shield,
       color: 'rose',
-      prompt: 'How does Section 3(p) and Section 3(e) of the Indian Patents Act impact patenting of natural Ayurvedic formulations?'
+      prompt: 'Check whether this invention may be patentable'
+    },
+    {
+      id: 'qa-prior-art',
+      title: 'Find Prior Art',
+      desc: 'Search IPO, TKDL & scientific literature',
+      icon: BookOpen,
+      color: 'blue',
+      prompt: 'Find relevant prior art'
+    },
+    {
+      id: 'qa-sec3p',
+      title: 'Explain Section 3(p)',
+      desc: 'Traditional knowledge exclusion statutory bar',
+      icon: Scale,
+      color: 'amber',
+      prompt: 'Explain Section 3(p) of the Indian Patents Act'
     },
     {
       id: 'qa-tkdl',
-      title: 'Check Traditional Knowledge',
-      desc: 'Cross-reference CSIR-TKDL & Samhitas',
-      icon: BookOpen,
-      color: 'amber',
-      prompt: 'Could my formulation of Guduchi and Pippali already exist in documented Traditional Knowledge (TKDL)?'
+      title: 'Check TKDL Relevance',
+      desc: 'Cross-reference 4.5 lakh CSIR formulations',
+      icon: Award,
+      color: 'teal',
+      prompt: 'Check Traditional Knowledge (TKDL) relevance'
     },
     {
       id: 'qa-abs',
-      title: 'Check ABS Requirements',
-      desc: 'NBA & SBB clearance under Biodiversity Act',
-      icon: Scale,
+      title: 'Understand ABS Compliance',
+      desc: 'NBA & SBB approval under Biodiversity Act',
+      icon: Building2,
       color: 'purple',
-      prompt: 'What are the Access and Benefit Sharing (ABS) requirements under the Biological Diversity Act 2002 for an Ayurvedic startup filing a patent?'
-    },
-    {
-      id: 'qa-classify',
-      title: 'Classify Drug/Formulation',
-      desc: 'Classical vs Proprietary ASU (Rule 158B)',
-      icon: FileCheck,
-      color: 'teal',
-      prompt: 'Is my Ayurvedic herbal supplement classified as Classical Ayurvedic Medicine or Patent/Proprietary Medicine under Rule 158B?'
-    },
-    {
-      id: 'qa-protection',
-      title: 'Find Relevant IP Protection',
-      desc: 'Trademarks, GI, Design & Trade Secrets',
-      icon: Award,
-      color: 'blue',
-      prompt: 'What IP protection strategy (Trademarks, GI, Designs, Trade Secrets) is best for an Ayurvedic wellness consumer product?'
+      prompt: 'Help me understand ABS compliance'
     }
   ];
 
+  // Suggested Prompts matching the exact user specification
   const suggestedPrompts = [
-    'Can I patent an Ashwagandha + Turmeric formulation?',
-    'What is Section 3(p) of the Indian Patent Act?',
-    'Do I need National Biodiversity Authority (NBA) approval?',
-    'Classical medicine vs Proprietary ASU medicine under Rule 158B',
-    'How does CSIR-TKDL prevent biopiracy?',
-    'GI tag protection for regional Ayurvedic medicinal plants'
+    'Analyze the IP protection options for my Ayurvedic formulation',
+    'Check whether this invention may be patentable',
+    'Find relevant prior art',
+    'Explain Section 3(p) of the Indian Patents Act',
+    'Check Traditional Knowledge (TKDL) relevance',
+    'Help me understand ABS compliance',
+    'Search for relevant patents and research'
   ];
 
   const scrollToBottom = () => {
@@ -191,124 +217,266 @@ export const AIAssistant: React.FC = () => {
     setInputText('');
     setIsTyping(true);
 
-    // Simulate Domain-Specific RAG Retrieval & Synthesis
+    // Simulate Domain-Specific RAG Retrieval & Tool Routing Synthesis
     setTimeout(() => {
       const qLower = query.toLowerCase();
       let response: AIMessage;
 
-      if (qLower.includes('ashwagandha') || qLower.includes('turmeric') || qLower.includes('patent it') || qLower.includes('formulation')) {
+      // SCENARIO 1: Patentability / Patent Question
+      if (qLower.includes('patentable') || qLower.includes('patent') || qLower.includes('invention')) {
         const scenario = sampleScenarios.ashwagandha_turmeric;
         response = {
           id: 'ai-' + Date.now(),
           sender: 'assistant',
           timestamp: 'Just now',
-          text: `Analysis for "${query}": A patent for this formulation faces Section 3(p) (Traditional Knowledge) and Section 3(e) (Mere Admixture) statutory hurdles unless unexpected synergistic efficacy is proven.`,
+          text: `Patentability Evaluation for "${query}": Under the Indian Patents Act 1970, Ayurvedic products face statutory hurdles under Section 3(p) (traditional knowledge exclusion) and Section 3(e) (mere admixture). A patent can only be granted if you demonstrate unexpected therapeutic synergism, novel bio-availability enhancement, or proprietary non-obvious processing methods.`,
           structuredResponse: {
             summary: scenario.summary,
-            relevantRegimes: scenario.regimes,
+            relevantRegimes: [
+              { regime: 'Patent', relevance: 'HIGH', badgeColor: 'rose', reason: 'Overcoming Section 3(p) TK bar & Section 3(e) mere admixture' },
+              { regime: 'Traditional Knowledge', relevance: 'HIGH', badgeColor: 'amber', reason: 'Cross-check against classical Samhitas & CSIR-TKDL entries' },
+              { regime: 'Trademark', relevance: 'HIGH', badgeColor: 'blue', reason: 'Class 5 coined brand name is strongly recommended alongside patenting' },
+              { regime: 'ABS (Biodiversity)', relevance: 'REVIEW REQUIRED', badgeColor: 'purple', reason: 'Mandatory Form III NBA approval prior to patent grant' }
+            ],
             patentability: scenario.patentability,
             traditionalKnowledge: scenario.traditionalKnowledge,
             regulatoryClassification: scenario.regulatoryClassification,
             absConsiderations: scenario.absConsiderations,
-            recommendedNextSteps: scenario.nextSteps,
-            sources: scenario.sources,
-            confidence: 'high',
-            confidenceScore: scenario.confidenceScore,
-            confidenceReason: 'Cross-referenced against Indian Patent Act 1970 Sections 3(p)/3(e), CSIR-TKDL formulation entries, and Biological Diversity Act Section 6.',
-            supportedClaimsRatio: '6/6 claims verified'
-          }
-        };
-      } else if (qLower.includes('abs') || qLower.includes('biodiversity') || qLower.includes('nba')) {
-        response = {
-          id: 'ai-' + Date.now(),
-          sender: 'assistant',
-          timestamp: 'Just now',
-          text: `Access and Benefit Sharing (ABS) Assessment for Biological Materials:`,
-          structuredResponse: {
-            summary: 'Under the Biological Diversity Act 2002 (amended 2023), accessing biological resources from India for commercial utilization or intellectual property filings mandates statutory compliance with the National Biodiversity Authority (NBA) or State Biodiversity Boards (SBB).',
-            relevantRegimes: [
-              { regime: 'ABS (Biodiversity)', relevance: 'HIGH', badgeColor: 'purple', reason: 'Section 6 requires prior NBA Form III approval before patent grant' },
-              { regime: 'Patent', relevance: 'HIGH', badgeColor: 'rose', reason: 'Patent grant suspended without NBA clearance certificate' },
-              { regime: 'Drug Regulation', relevance: 'RELEVANT', badgeColor: 'emerald', reason: 'Raw herb batch procurement tracing required by State Licensing Authority' }
+            suggestedTools: [
+              { label: 'Formulation Analysis', path: '/formulation-analysis', reason: 'Screen ingredients for novelty, classical references & synergy ratio' },
+              { label: 'IP Regime Analysis', path: '/regimes?type=patent', reason: 'Detailed statutory breakdown of Section 3(p) and patent filing requirements' },
+              { label: 'Research & Patents Prior Art', path: '/prior-art', reason: 'Search Indian and international prior art databases' }
             ],
-            patentability: {
-              status: 'Conditional on Mandatory Statutory Clearances',
-              analysis: 'Failure to disclose biological resource geographical origin or omission of NBA approval is a ground for patent rejection under Section 25(1)(j) / revocation under Section 64(1)(p).',
-              section3pFlag: false,
-              noveltyAssessment: 'Separate procedural statutory requirement independent of technical novelty.'
-            },
-            traditionalKnowledge: {
-              matchFound: false,
-              priorArtImplication: 'ABS focuses on equitable benefit sharing with local indigenous communities and biodiversity conservation.'
-            },
-            regulatoryClassification: {
-              category: 'Commercial Biological Utilization Compliance',
-              pathway: 'NBA Form I (Foreign Entities) / Form III (IPR Filings) / SBB Prior Intimation (Indian Entities)',
-              rule158BNote: 'Requires sustainable harvesting compliance for rare and endangered medicinal herbs.'
-            },
-            absConsiderations: {
-              nbaApprovalRequired: true,
-              details: 'Indian Patent Office will not seal a patent without an official No Objection Certificate (NOC) from the NBA. SBB intimation is required for domestic commercial utilization.',
-              legalAct: 'The Biological Diversity Act, 2002 — Sections 3, 4, 6, 7 & 19'
-            },
             recommendedNextSteps: [
-              'Submit NBA Form III immediately if an Indian or PCT patent application has been filed.',
-              'Maintain detailed provenance logbooks verifying raw materials were procured from local verified farmers or registered mandis.',
-              'Verify if any accessed herbs are listed as threatened/endangered under CITES or Section 38 of BDA.'
+              'Perform a quantitative synergy study (Combination Index < 0.8) to satisfy Section 3(e).',
+              'Check formulation against 4.5 lakh entries in the CSIR-TKDL database.',
+              'Submit NBA Form III before patent application grant.',
+              'Register coined proprietary trademarks under Nice Class 5.'
             ],
-            sources: [authoritativeSources[4], authoritativeSources[5]],
+            sources: [authoritativeSources[0], authoritativeSources[1], authoritativeSources[2], authoritativeSources[4]],
             confidence: 'high',
-            confidenceScore: 94,
-            confidenceReason: 'Statutory compliance mandate under Sections 3 and 6 of the Biological Diversity Act, 2002.',
-            supportedClaimsRatio: '3/3 claims verified'
+            confidenceScore: 92,
+            confidenceReason: 'Cross-referenced against Indian Patent Act 1970 Sections 3(p)/3(e) and CSIR-TKDL pharmacopoeia.',
+            supportedClaimsRatio: '4/4 claims verified'
           }
         };
-      } else if (qLower.includes('rule 158b') || qLower.includes('classical') || qLower.includes('proprietary') || qLower.includes('classify')) {
+      }
+      // SCENARIO 2: Prior Art & Research Search
+      else if (qLower.includes('prior art') || qLower.includes('prior-art') || qLower.includes('search for relevant') || qLower.includes('research')) {
         response = {
           id: 'ai-' + Date.now(),
           sender: 'assistant',
           timestamp: 'Just now',
-          text: `Regulatory Drug Classification under Drugs and Cosmetics Rules, 1945 (Rule 158B):`,
+          text: `Prior Art & Research Retrieval for "${query}": In Ayurvedic intellectual property, prior art encompasses not only published patent specifications and academic literature, but also the ancient Sanskrit, Arabic, and Persian classical treatises codified in the CSIR-TKDL database.`,
           structuredResponse: {
-            summary: 'The Drugs and Cosmetics Act distinguishes Classical Ayurvedic Medicines (manufactured strictly according to the 54 First Schedule authoritative texts) from Patent or Proprietary Medicines (innovative combinations or novel dosage forms containing textual ingredients).',
+            summary: 'Comprehensive prior-art search across Indian Patent Office (IPO) records, international databases (USPTO, EPO, WIPO), and traditional knowledge repositories (TKDL) is essential to identify novelty-destroying disclosures before filing.',
             relevantRegimes: [
-              { regime: 'Drug Regulation', relevance: 'HIGH', badgeColor: 'emerald', reason: 'Governed under Rule 158B licensing guidelines for ASU drugs' },
-              { regime: 'Trademark', relevance: 'HIGH', badgeColor: 'blue', reason: 'Proprietary ASU drugs rely primarily on trademark brand equity under Class 5' },
-              { regime: 'Patent', relevance: 'LOW', badgeColor: 'stone', reason: 'Classical formulations are strictly non-patentable public domain prior art' }
+              { regime: 'Traditional Knowledge', relevance: 'HIGH', badgeColor: 'amber', reason: 'Ancient Samhita citations serve as anticipatory prior art' },
+              { regime: 'Patent', relevance: 'HIGH', badgeColor: 'rose', reason: 'Determines whether inventive step is non-obvious to an Ayurvedic practitioner' },
+              { regime: 'Source Explorer', relevance: 'RELEVANT', badgeColor: 'emerald', reason: 'Verified shlokas from Charaka, Sushruta, and Ashtanga Hridaya' }
             ],
             patentability: {
-              status: 'Classical Medicines: Non-Patentable | Proprietary: Conditionally Patentable',
-              analysis: 'Classical formulations belong in the public domain and cannot be patented. Proprietary formulations can only be patented if demonstrable synergistic bio-availability or novel delivery (e.g. effervescent tablet, nano-suspension) is substantiated.',
+              status: 'Prior Art Search Dictates Claim Scope',
+              analysis: 'If an ingredient combination or therapeutic indication is already disclosed in classical texts or prior patents, patent claims must be limited strictly to novel delivery systems or synergistic ratios.',
               section3pFlag: true
             },
             traditionalKnowledge: {
               matchFound: true,
-              tkdlRecord: '54 Authoritative Classical Books in First Schedule of D&C Act (Charaka, Sushruta, Sahasrayoga, etc.)',
-              priorArtImplication: 'Classical ASU formulations are pre-documented, eliminating technical novelty.'
+              tkdlRecord: 'CSIR-TKDL Corpus (IPC Class A61K 36)',
+              classicalReference: 'Charaka Samhita, Sushruta Samhita, Bhavaprakasha Nighantu',
+              priorArtImplication: 'Classical documentation acts as anticipatory prior art cited by examiners worldwide to revoke natural product patents.'
             },
-            regulatoryClassification: {
-              category: 'Classical vs Patent or Proprietary ASU Medicine',
-              pathway: 'Rule 158B of Drugs & Cosmetics Rules, 1945',
-              rule158BNote: 'Proprietary medicines require pilot clinical trials and safety dossiers if textual dosage form or proportion is substantially modified.'
-            },
-            absConsiderations: {
-              nbaApprovalRequired: false,
-              details: 'Indian AYUSH practitioners and manufacturers producing purely classical ASU medicines for domestic sale have specific exemptions under BDA Section 40 notifications.',
-              legalAct: 'Biological Diversity Act, 2002 (Section 40 Exemption)'
-            },
-            recommendedNextSteps: [
-              'Ascertain whether your exact formula appears verbatim in First Schedule texts.',
-              'If modified, prepare stability and toxicity dossiers for State Licensing Authority (SLA) submission.',
-              'Register your proprietary brand name in Trademark Class 5.'
+            suggestedTools: [
+              { label: 'Research & Patents Prior Art', path: '/prior-art', reason: 'Search IPO, USPTO, EPO & WIPO prior art records' },
+              { label: 'Source Explorer', path: '/sources', reason: 'Examine authoritative shlokas, statutory provisions & gazettes' },
+              { label: 'Traditional Knowledge (TKDL)', path: '/tkdl', reason: 'Search 4.5 lakh CSIR-TKDL codified formulations' }
             ],
-            sources: [authoritativeSources[6], authoritativeSources[7]],
+            recommendedNextSteps: [
+              'Conduct a targeted keyword and IPC A61K 36 classification search.',
+              'Examine CSIR-TKDL prior art outcome cases (e.g. Turmeric, Neem, Ashwagandha revocations).',
+              'Draft patent claims that clearly distinguish from identified classical citations.'
+            ],
+            sources: [authoritativeSources[2], authoritativeSources[3], authoritativeSources[0]],
             confidence: 'high',
             confidenceScore: 95,
-            confidenceReason: 'Direct statutory interpretation of D&C Act 1940 Section 3(a) and Rule 158B.',
-            supportedClaimsRatio: '4/4 claims verified'
+            confidenceReason: 'Direct synthesis from CSIR-TKDL corpus and IPO prior-art guidelines.',
+            supportedClaimsRatio: '3/3 claims verified'
           }
         };
-      } else {
+      }
+      // SCENARIO 3: Section 3(p) Explanation
+      else if (qLower.includes('section 3(p)') || qLower.includes('3(p)') || qLower.includes('3p')) {
+        response = {
+          id: 'ai-' + Date.now(),
+          sender: 'assistant',
+          timestamp: 'Just now',
+          text: `Section 3(p) Statutory Analysis (Indian Patents Act, 1970): Section 3(p) explicitly bars from patentability: "an invention which in effect, is traditional knowledge or which is an aggregation or duplication of known properties of traditionally known component or components."`,
+          structuredResponse: {
+            summary: 'Section 3(p) was incorporated via the Patents (Amendment) Act 2002 to safeguard India’s rich Ayurvedic and traditional heritage from misappropriation and biopiracy. If a patent claim covers botanicals or recipes documented in classical Samhitas, the Patent Office will issue a Section 3(p) rejection unless surprising, non-obvious synergistic efficacy is proven.',
+            relevantRegimes: [
+              { regime: 'Patent', relevance: 'HIGH', badgeColor: 'rose', reason: 'Statutory non-patentability bar under Section 3(p)' },
+              { regime: 'Traditional Knowledge', relevance: 'HIGH', badgeColor: 'amber', reason: 'TKDL acts as evidentiary proof for Section 3(p) objections' }
+            ],
+            patentability: {
+              status: 'Statutory Exclusion Bar Under Section 3(p)',
+              analysis: 'To overcome Section 3(p), the applicant must show that the claimed formulation produces results that could not be predicted from the known classical properties of the individual components.',
+              section3pFlag: true,
+              noveltyAssessment: 'Mere extraction or simple mixing of traditional herbs is deemed non-patentable subject matter.'
+            },
+            traditionalKnowledge: {
+              matchFound: true,
+              tkdlRecord: 'Patents Act 1970 — Section 3(p)',
+              classicalReference: 'First Schedule texts of Drugs & Cosmetics Act 1940',
+              priorArtImplication: 'Acts as an absolute statutory objection during first examination report (FER).'
+            },
+            suggestedTools: [
+              { label: 'IP Regime Analysis (Patent)', path: '/regimes?type=patent', reason: 'Review Section 3(p) statutory breakdown & defense strategies' },
+              { label: 'Traditional Knowledge (TKDL)', path: '/tkdl', reason: 'Check which ingredients trigger Section 3(p) scrutiny' },
+              { label: 'Formulation Analysis', path: '/formulation-analysis', reason: 'Screen formulation ingredients against Section 3(p)' }
+            ],
+            recommendedNextSteps: [
+              'Submit experimental comparative data proving synergy (Combination Index < 0.8).',
+              'Focus patent claims on novel pharmaceutical formulations (e.g. liposomal, nano-particle) rather than raw extracts.',
+              'Rely on Trademark Class 5 and Industrial Design for overall commercial brand protection.'
+            ],
+            sources: [authoritativeSources[0], authoritativeSources[1]],
+            confidence: 'high',
+            confidenceScore: 96,
+            confidenceReason: 'Direct statutory interpretation of Section 3(p) and IPO Patent Manual guidelines.',
+            supportedClaimsRatio: '2/2 claims verified'
+          }
+        };
+      }
+      // SCENARIO 4: Traditional Knowledge / TKDL Relevance
+      else if (qLower.includes('traditional knowledge') || qLower.includes('tkdl')) {
+        response = {
+          id: 'ai-' + Date.now(),
+          sender: 'assistant',
+          timestamp: 'Just now',
+          text: `Traditional Knowledge Digital Library (CSIR-TKDL) Assessment: The TKDL is a pioneering Indian database that translates and codifies traditional medicine knowledge from Sanskrit, Hindi, Arabic, Persian, and Urdu into five international languages (English, German, French, Japanese, Spanish).`,
+          structuredResponse: {
+            summary: 'With over 4.5 lakh codified Ayurvedic, Unani, and Siddha formulations classified under the International Patent Classification (IPC A61K 36), the TKDL serves as defensive prior art used by patent offices across the world to reject biopiracy claims.',
+            relevantRegimes: [
+              { regime: 'Traditional Knowledge', relevance: 'HIGH', badgeColor: 'amber', reason: 'Primary defensive database against natural product patenting' },
+              { regime: 'Patent', relevance: 'HIGH', badgeColor: 'rose', reason: 'TKDL citations act as novelty-destroying prior art' },
+              { regime: 'Source Explorer', relevance: 'RELEVANT', badgeColor: 'emerald', reason: 'Samhita shlokas linked directly to TKDL formulation codes' }
+            ],
+            patentability: {
+              status: 'Defensive Prior Art Shield',
+              analysis: 'If your formulation duplicates a TKDL formulation code, it is considered pre-existing knowledge in the public domain and cannot be patented.',
+              section3pFlag: true
+            },
+            traditionalKnowledge: {
+              matchFound: true,
+              tkdlRecord: 'CSIR-TKDL Database (over 450,000 formulations codified)',
+              classicalReference: 'Charaka Samhita, Sushruta Samhita, Ashtanga Hridaya, Sharangadhara Samhita',
+              priorArtImplication: 'TKDL entries are systematically shared with USPTO, EPO, JPO, and IPO examiners.'
+            },
+            suggestedTools: [
+              { label: 'Traditional Knowledge (TKDL)', path: '/tkdl', reason: 'Search 4.5 lakh CSIR-TKDL formulations and classical references' },
+              { label: 'Source Explorer', path: '/sources', reason: 'Trace classical texts, shlokas & regulatory gazettes' },
+              { label: 'Formulation Analysis', path: '/formulation-analysis', reason: 'Run an automated TKDL cross-check on your formulation' }
+            ],
+            recommendedNextSteps: [
+              'Verify whether your formulation matches any classical yoga listed in the First Schedule.',
+              'If the formulation is purely classical, register it as a Classical ASU medicine under Rule 158B.',
+              'Use coined trademarks to protect commercial branding in Nice Class 5.'
+            ],
+            sources: [authoritativeSources[2], authoritativeSources[3]],
+            confidence: 'high',
+            confidenceScore: 94,
+            confidenceReason: 'CSIR-TKDL pharmacopoeia database records and bilateral IPO examiner search protocols.',
+            supportedClaimsRatio: '2/2 claims verified'
+          }
+        };
+      }
+      // SCENARIO 5: ABS Compliance (NBA / Biodiversity)
+      else if (qLower.includes('abs') || qLower.includes('biodiversity') || qLower.includes('nba')) {
+        response = {
+          id: 'ai-' + Date.now(),
+          sender: 'assistant',
+          timestamp: 'Just now',
+          text: `Access and Benefit Sharing (ABS) Compliance under Biological Diversity Act, 2002: Any entity utilizing biological resources occurring in or obtained from India for commercial utilization, bio-survey, or intellectual property filing must comply with mandatory National Biodiversity Authority (NBA) and State Biodiversity Board (SBB) clearance protocols.`,
+          structuredResponse: {
+            summary: 'Under Section 6 of the Biological Diversity Act 2002 (amended 2023), no person shall apply for any intellectual property right in or outside India for any invention based on any research or information on a biological resource obtained from India without prior approval of the NBA.',
+            relevantRegimes: [
+              { regime: 'ABS (Biodiversity)', relevance: 'HIGH', badgeColor: 'purple', reason: 'Section 6 requires mandatory NBA Form III filing before patent grant' },
+              { regime: 'Patent', relevance: 'HIGH', badgeColor: 'rose', reason: 'Patent grant will be withheld by IPO without NBA clearance NOC' },
+              { regime: 'Drug Regulation', relevance: 'RELEVANT', badgeColor: 'emerald', reason: 'Sustainable sourcing verification required for ASU manufacturing' }
+            ],
+            patentability: {
+              status: 'Conditional on Mandatory Statutory Clearances',
+              analysis: 'Failure to disclose the geographical origin of biological resources or failure to obtain NBA approval is a statutory ground for patent opposition under Section 25(1)(j) or revocation under Section 64(1)(p).',
+              section3pFlag: false
+            },
+            traditionalKnowledge: {
+              matchFound: false,
+              priorArtImplication: 'ABS focuses on fair and equitable sharing of benefits with local indigenous communities.'
+            },
+            absConsiderations: {
+              nbaApprovalRequired: true,
+              details: 'Indian Patent Office will not seal a patent grant without an official No Objection Certificate (NOC) from the NBA. Form III must be filed before patent grant.',
+              legalAct: 'The Biological Diversity Act, 2002 — Sections 3, 4, 6, 7 & 19'
+            },
+            suggestedTools: [
+              { label: 'ABS Compliance (NBA)', path: '/abs-compliance', reason: 'Interactive NBA Form III clearance checklist & fee calculator' },
+              { label: 'Saved Reports & Dossiers', path: '/reports', reason: 'Generate and export ABS regulatory compliance dossiers' },
+              { label: 'IP Regime Analysis', path: '/regimes?type=abs', reason: 'Understand legal penalties and statutory exemptions under BDA' }
+            ],
+            recommendedNextSteps: [
+              'Submit NBA Form III application immediately upon filing an Indian or PCT patent.',
+              'Maintain audited provenance records of raw herb procurement from registered mandis or farmers.',
+              'Verify whether any botanicals fall under Section 38 (Threatened Species) or CITES lists.'
+            ],
+            sources: [authoritativeSources[4], authoritativeSources[5]],
+            confidence: 'high',
+            confidenceScore: 95,
+            confidenceReason: 'Statutory compliance mandate under Sections 3, 6, and 19 of the Biological Diversity Act, 2002.',
+            supportedClaimsRatio: '2/2 claims verified'
+          }
+        };
+      }
+      // SCENARIO 6: IP Protection Options / Strategy
+      else if (qLower.includes('protection options') || qLower.includes('protection') || qLower.includes('strategy') || qLower.includes('regimes')) {
+        response = {
+          id: 'ai-' + Date.now(),
+          sender: 'assistant',
+          timestamp: 'Just now',
+          text: `Holistic IP Protection Strategy for Ayurvedic Products: Because single Ayurvedic patents face strict Section 3(p) traditional knowledge barriers, a multi-regime intellectual property framework is the industry gold standard for herbal and AYUSH enterprises.`,
+          structuredResponse: {
+            summary: 'An optimal Ayurveda IP portfolio combines: (1) Nice Class 5 coined Trademarks for proprietary brand identity, (2) Industrial Design registration for unique packaging and bottles, (3) Trade Secrets for proprietary extraction protocols, (4) Geographical Indications for terroir-dependent botanicals, and (5) Patents focused strictly on novel synergistic delivery systems.',
+            relevantRegimes: [
+              { regime: 'Trademark', relevance: 'HIGH', badgeColor: 'blue', reason: 'Class 5 coined brand name offers 10-year renewable monopoly' },
+              { regime: 'Patent', relevance: 'MEDIUM', badgeColor: 'rose', reason: 'Focus on synergistic bio-availability enhancement & delivery' },
+              { regime: 'Trade Secret', relevance: 'HIGH', badgeColor: 'stone', reason: 'Proprietary solvent ratios and extraction temperatures' },
+              { regime: 'Design', relevance: 'RELEVANT', badgeColor: 'teal', reason: 'Bottle shape & packaging under Class 28-02' },
+              { regime: 'GI', relevance: 'RELEVANT', badgeColor: 'amber', reason: 'Authentic regional herb sourcing (e.g. Malabar Pepper)' }
+            ],
+            patentability: {
+              status: 'Multi-Tiered Protection Strategy',
+              analysis: 'Where patentability is barred under Section 3(p), trademarks and trade secrets provide indefinite commercial exclusivity without public disclosure.',
+              section3pFlag: true
+            },
+            suggestedTools: [
+              { label: 'IP Regime Analysis', path: '/regimes', reason: 'Comprehensive analysis of all 10 IP regimes for Ayurveda' },
+              { label: 'Formulation Analysis', path: '/formulation-analysis', reason: 'Identify patentable vs non-patentable components' },
+              { label: 'Drug Classification', path: '/drug-classification', reason: 'Align IP strategy with Rule 158B manufacturing pathway' }
+            ],
+            recommendedNextSteps: [
+              'File coined trademark applications in Nice Class 5 early before market launch.',
+              'Implement non-disclosure agreements (NDAs) to safeguard proprietary extraction methods.',
+              'Verify whether any botanicals possess Geographical Indication (GI) provenance.'
+            ],
+            sources: [authoritativeSources[0], authoritativeSources[6], authoritativeSources[4]],
+            confidence: 'high',
+            confidenceScore: 92,
+            confidenceReason: 'Multi-regime strategy synthesized from Indian IP jurisprudence and commercial AYUSH best practices.',
+            supportedClaimsRatio: '3/3 claims verified'
+          }
+        };
+      }
+      // DEFAULT: General Comprehensive RAG Synthesis
+      else {
         response = {
           id: 'ai-' + Date.now(),
           sender: 'assistant',
@@ -326,7 +494,7 @@ export const AIAssistant: React.FC = () => {
               status: 'Requires Detailed Experimental Data Submission',
               analysis: 'A patent cannot be obtained for an invention that merely aggregates or reproduces known Ayurvedic properties. Clear, non-obvious bio-enhancement, synthetic synergism, or novel processing must be established.',
               section3pFlag: true,
-              noveltyAssessment: 'Lacks novelty if ingredients duplicate classical Samhita remedies.'
+              noveltyAssessment: 'Lacks novelty if ingredients duplicate classical Samhita remedies without unexpected synergy.'
             },
             traditionalKnowledge: {
               matchFound: true,
@@ -344,6 +512,12 @@ export const AIAssistant: React.FC = () => {
               details: 'If applying for IP protection, mandatory Form III filing with NBA is necessary.',
               legalAct: 'Biological Diversity Act, 2002'
             },
+            suggestedTools: [
+              { label: 'Formulation Analysis', path: '/formulation-analysis', reason: 'Deep dive into your exact botanical formulation ingredients' },
+              { label: 'IP Regime Analysis', path: '/regimes', reason: 'Evaluate which of the 10 IP regimes fit your commercial strategy' },
+              { label: 'Research & Patents Prior Art', path: '/prior-art', reason: 'Check whether similar formulations exist in patent records' },
+              { label: 'Traditional Knowledge (TKDL)', path: '/tkdl', reason: 'Verify traditional knowledge documentation' }
+            ],
             recommendedNextSteps: [
               'Perform a formal prior-art clearance search on TKDL and Indian Patent Office database.',
               'Quantify synergistic bio-activity to overcome Section 3(e) admixture objections.',
@@ -352,16 +526,16 @@ export const AIAssistant: React.FC = () => {
             ],
             sources: [authoritativeSources[0], authoritativeSources[2], authoritativeSources[4], authoritativeSources[6]],
             confidence: 'moderate',
-            confidenceScore: 84,
-            confidenceReason: 'General synthesis from core statutory frameworks (Patents Act 1970, BDA 2002, D&C Act 1940). Specific experimental validation recommended.',
-            supportedClaimsRatio: '5/5 claims verified'
+            confidenceScore: 88,
+            confidenceReason: 'General synthesis from core statutory frameworks (Patents Act 1970, BDA 2002, D&C Act 1940). Specific formulation screening recommended.',
+            supportedClaimsRatio: '4/4 claims verified'
           }
         };
       }
 
       setMessages(prev => [...prev, response]);
       setIsTyping(false);
-    }, 850);
+    }, 750);
   };
 
   const toggleMic = () => {
@@ -371,9 +545,9 @@ export const AIAssistant: React.FC = () => {
       setTimeout(() => {
         setIsListening(false);
         const sampleVoiceQueries: Record<string, string> = {
-          en: 'I developed a new Ayurvedic formulation using Ashwagandha and Turmeric. Can I patent it?',
-          te: 'అశ్వగంధ మరియు పసుపుతో కొత్త ఆయుర్వేద ఫార్ములేషన్ తయారు చేసాను. నేను పేటెంట్ పొందవచ్చా?',
-          hi: 'मैंने अश्वगंधा और हल्दी से एक नया आयुर्वेदिक योग विकसित किया है। क्या मैं इसका पेटेंट करा सकता हूँ?'
+          en: 'Check whether this invention may be patentable',
+          te: 'ఈ ఆవిష్కరణకు పేటెంట్ పొందవచ్చో లేదో తనిఖీ చేయండి',
+          hi: 'जांचें कि क्या इस आविष्कार का पेटेंट कराया जा सकता है'
         };
         handleSend(sampleVoiceQueries[language] || sampleVoiceQueries.en);
       }, 2500);
@@ -387,8 +561,7 @@ export const AIAssistant: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-5rem)] max-w-7xl mx-auto px-2 sm:px-4 py-2">
-
+    <div className="flex flex-col h-[calc(100vh-5.5rem)] max-w-7xl mx-auto px-2 sm:px-4 py-2">
 
       {/* Main Chat Container */}
       <div className="flex-1 flex flex-col bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden min-h-0">
@@ -396,14 +569,52 @@ export const AIAssistant: React.FC = () => {
         {/* Messages Scroll Area */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
           
-          {/* Quick Action Cards Grid (Shown prominently) */}
-          <div className="mb-6">
+          {/* Hero Banner: Identity & Product Overview */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-stone-900 text-white shadow-sm border border-emerald-800/40">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="p-1.5 rounded-lg bg-emerald-500/20 border border-emerald-400/30 text-emerald-300">
+                    <Scale className="w-5 h-5" />
+                  </div>
+                  <h1 className="text-lg sm:text-xl font-black tracking-tight text-white">
+                    IP-SAKTI
+                  </h1>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    AI Assistant
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-emerald-100 font-medium">
+                  AI-Powered Multilingual Intellectual Property & Ayurveda Regulatory Assistant
+                </p>
+              </div>
+
+              {/* Status Tags */}
+              <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                <span className="px-2 py-1 rounded-md bg-white/10 border border-white/15 text-emerald-200 font-mono">
+                  Patents Act Sec 3(p)
+                </span>
+                <span className="px-2 py-1 rounded-md bg-white/10 border border-white/15 text-emerald-200 font-mono">
+                  CSIR-TKDL
+                </span>
+                <span className="px-2 py-1 rounded-md bg-white/10 border border-white/15 text-emerald-200 font-mono">
+                  BDA 2002 (ABS)
+                </span>
+                <span className="px-2 py-1 rounded-md bg-white/10 border border-white/15 text-emerald-200 font-mono">
+                  Rule 158B ASU
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Action Cards Grid */}
+          <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
-                Intelligent Quick Actions & Workflows
+                Intelligent Workflows & Suggested Prompts
               </span>
-              <span className="text-[11px] text-stone-400">Click any card to begin instant AI analysis</span>
+              <span className="text-[11px] text-stone-400 hidden sm:inline">Click any prompt to trigger instant AI evaluation</span>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
@@ -413,7 +624,7 @@ export const AIAssistant: React.FC = () => {
                   <button
                     key={qa.id}
                     onClick={() => handleQuickAction(qa.prompt)}
-                    className="text-left p-3 rounded-xl border border-stone-200 hover:border-emerald-500 hover:bg-emerald-50/40 transition-all group flex items-start gap-3 bg-stone-50/50 hover:shadow-xs"
+                    className="text-left p-3 rounded-xl border border-stone-200 hover:border-emerald-500 hover:bg-emerald-50/40 transition-all group flex items-start gap-3 bg-stone-50/50 hover:shadow-2xs cursor-pointer"
                   >
                     <div className="p-2 rounded-lg bg-white border border-stone-200 group-hover:border-emerald-400 text-emerald-800 shrink-0 shadow-2xs">
                       <Icon className="w-4 h-4" />
@@ -443,7 +654,7 @@ export const AIAssistant: React.FC = () => {
               <div className="flex items-center gap-1.5 mb-1.5 text-[11px] text-stone-400 font-medium">
                 {msg.sender === 'user' ? (
                   <>
-                    <span className="font-semibold text-stone-600">You (Ayurveda Innovator)</span>
+                    <span className="font-semibold text-stone-600">You</span>
                     <User className="w-3.5 h-3.5 text-stone-500" />
                   </>
                 ) : (
@@ -451,7 +662,7 @@ export const AIAssistant: React.FC = () => {
                     <div className="w-4 h-4 rounded-md bg-emerald-800 text-white flex items-center justify-center">
                       <Bot className="w-2.5 h-2.5" />
                     </div>
-                    <span className="font-bold text-emerald-900">IP-SAKTI Sahayak</span>
+                    <span className="font-bold text-emerald-900">IP-SAKTI Assistant</span>
                     <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-semibold border border-emerald-200">
                       RAG Verified
                     </span>
@@ -465,8 +676,8 @@ export const AIAssistant: React.FC = () => {
               <div
                 className={`max-w-4xl w-full rounded-2xl transition-all ${
                   msg.sender === 'user'
-                    ? 'bg-emerald-900 text-white p-4 sm:p-5 rounded-tr-none shadow-xs ml-auto'
-                    : 'bg-white border border-stone-200/90 text-stone-800 p-4 sm:p-6 rounded-tl-none shadow-xs space-y-5'
+                    ? 'bg-emerald-900 text-white p-4 sm:p-5 rounded-tr-none shadow-2xs ml-auto'
+                    : 'bg-white border border-stone-200/90 text-stone-800 p-4 sm:p-6 rounded-tl-none shadow-2xs space-y-5'
                 }`}
               >
                 {/* Text Lead */}
@@ -537,7 +748,42 @@ export const AIAssistant: React.FC = () => {
                       </div>
                     )}
 
-                    {/* 3. PATENTABILITY & 4. TRADITIONAL KNOWLEDGE CHECK (2-column layout) */}
+                    {/* 3. DIRECT ACTION: SUGGESTED SPECIALIZED TOOLS (Chatbot Entry Point) */}
+                    {msg.structuredResponse.suggestedTools && msg.structuredResponse.suggestedTools.length > 0 && (
+                      <div className="p-4 bg-emerald-50/70 border border-emerald-200/90 rounded-xl space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-emerald-950 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                            <ArrowRight className="w-3.5 h-3.5 text-emerald-700" />
+                            Suggested Specialized Tools & Analysis Modules
+                          </span>
+                          <span className="text-[10px] text-emerald-700 font-semibold">Direct Deep-Dive</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                          {msg.structuredResponse.suggestedTools.map((tool, tIdx) => (
+                            <button
+                              key={tIdx}
+                              onClick={() => navigate(tool.path)}
+                              className="text-left p-2.5 bg-white hover:bg-emerald-100/60 border border-emerald-300/80 hover:border-emerald-600 rounded-lg transition-all group shadow-2xs flex flex-col justify-between cursor-pointer"
+                            >
+                              <div className="flex items-center justify-between gap-1 w-full">
+                                <span className="font-bold text-xs text-stone-900 group-hover:text-emerald-900 flex items-center gap-1.5">
+                                  <span className="text-emerald-700">→</span>
+                                  <span>{tool.label}</span>
+                                </span>
+                                <ChevronRight className="w-3.5 h-3.5 text-emerald-700 group-hover:translate-x-0.5 transition-transform" />
+                              </div>
+                              {tool.reason && (
+                                <p className="text-[11px] text-stone-600 mt-1 line-clamp-1 group-hover:text-emerald-900 font-normal">
+                                  {tool.reason}
+                                </p>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 4. PATENTABILITY & TRADITIONAL KNOWLEDGE CHECK (2-column layout) */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {/* Patentability */}
                       {msg.structuredResponse.patentability && (
@@ -549,7 +795,7 @@ export const AIAssistant: React.FC = () => {
                             </span>
                             {msg.structuredResponse.patentability.section3pFlag && (
                               <span className="px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 font-bold">
-                                Sec 3(p) Flagged
+                                Sec 3(p) Active Bar
                               </span>
                             )}
                           </div>
@@ -560,8 +806,8 @@ export const AIAssistant: React.FC = () => {
                             {msg.structuredResponse.patentability.analysis}
                           </p>
                           {msg.structuredResponse.patentability.noveltyAssessment && (
-                            <div className="p-2 bg-stone-50 rounded text-[11px] text-stone-600 mt-1 border border-stone-100">
-                              <span className="font-bold text-stone-700">Novelty Criteria: </span>
+                            <div className="pt-1 text-[11px] text-stone-500 font-medium border-t border-stone-100">
+                              <span className="text-stone-700 font-semibold">Novelty Bar: </span>
                               {msg.structuredResponse.patentability.noveltyAssessment}
                             </div>
                           )}
@@ -574,25 +820,21 @@ export const AIAssistant: React.FC = () => {
                           <div className="flex items-center justify-between text-[10px] font-bold text-amber-900 uppercase tracking-wider">
                             <span className="flex items-center gap-1.5">
                               <BookOpen className="w-3.5 h-3.5 text-amber-600" />
-                              Traditional Knowledge (TKDL) Check
+                              Traditional Knowledge (TKDL)
                             </span>
-                            {msg.structuredResponse.traditionalKnowledge.matchFound && (
-                              <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold">
-                                Prior Art Match
-                              </span>
-                            )}
+                            <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold">
+                              4.5L Formulations
+                            </span>
                           </div>
-                          {msg.structuredResponse.traditionalKnowledge.tkdlRecord && (
-                            <div className="text-xs font-bold text-stone-900 font-mono">
-                              {msg.structuredResponse.traditionalKnowledge.tkdlRecord}
-                            </div>
-                          )}
+                          <div className="text-xs font-bold text-stone-900">
+                            {msg.structuredResponse.traditionalKnowledge.tkdlRecord || 'CSIR-TKDL Database'}
+                          </div>
                           <p className="text-xs text-stone-600 leading-relaxed">
                             {msg.structuredResponse.traditionalKnowledge.priorArtImplication}
                           </p>
                           {msg.structuredResponse.traditionalKnowledge.classicalReference && (
-                            <div className="p-2 bg-stone-50 rounded text-[11px] text-stone-600 mt-1 border border-stone-100">
-                              <span className="font-bold text-stone-700">Classical Corpus: </span>
+                            <div className="pt-1 text-[11px] text-stone-500 font-medium border-t border-stone-100">
+                              <span className="text-stone-700 font-semibold">Corpus: </span>
                               {msg.structuredResponse.traditionalKnowledge.classicalReference}
                             </div>
                           )}
@@ -600,14 +842,16 @@ export const AIAssistant: React.FC = () => {
                       )}
                     </div>
 
-                    {/* 5. REGULATORY CLASSIFICATION & 6. ABS CONSIDERATIONS */}
+                    {/* 5. DRUG CLASSIFICATION & ABS (2-column layout) */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {/* Regulatory Classification */}
+                      {/* Drug Classification */}
                       {msg.structuredResponse.regulatoryClassification && (
                         <div className="p-3.5 bg-white border border-teal-200/80 rounded-xl space-y-1.5">
-                          <div className="flex items-center gap-1.5 text-[10px] font-bold text-teal-900 uppercase tracking-wider">
-                            <FileCheck className="w-3.5 h-3.5 text-teal-600" />
-                            <span>Drug Regulatory Classification (Rule 158B)</span>
+                          <div className="flex items-center justify-between text-[10px] font-bold text-teal-900 uppercase tracking-wider">
+                            <span className="flex items-center gap-1.5">
+                              <FileCheck className="w-3.5 h-3.5 text-teal-600" />
+                              Drug Classification (Rule 158B)
+                            </span>
                           </div>
                           <div className="text-xs font-bold text-stone-900">
                             {msg.structuredResponse.regulatoryClassification.category}
@@ -618,13 +862,13 @@ export const AIAssistant: React.FC = () => {
                         </div>
                       )}
 
-                      {/* ABS Considerations */}
+                      {/* ABS Requirements */}
                       {msg.structuredResponse.absConsiderations && (
                         <div className="p-3.5 bg-white border border-purple-200/80 rounded-xl space-y-1.5">
                           <div className="flex items-center justify-between text-[10px] font-bold text-purple-900 uppercase tracking-wider">
                             <span className="flex items-center gap-1.5">
-                              <Scale className="w-3.5 h-3.5 text-purple-600" />
-                              ABS & Biodiversity Compliance
+                              <Building2 className="w-3.5 h-3.5 text-purple-600" />
+                              ABS (Biodiversity Act, 2002)
                             </span>
                             {msg.structuredResponse.absConsiderations.nbaApprovalRequired && (
                               <span className="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-bold">
@@ -642,7 +886,7 @@ export const AIAssistant: React.FC = () => {
                       )}
                     </div>
 
-                    {/* 7. RECOMMENDED NEXT STEPS */}
+                    {/* 6. RECOMMENDED NEXT STEPS */}
                     {msg.structuredResponse.recommendedNextSteps && msg.structuredResponse.recommendedNextSteps.length > 0 && (
                       <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200">
                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-stone-800 uppercase tracking-wider mb-2">
@@ -662,7 +906,7 @@ export const AIAssistant: React.FC = () => {
                       </div>
                     )}
 
-                    {/* 8. SOURCES SECTION (TRACEABLE RAG CARDS) */}
+                    {/* 7. SOURCES SECTION (TRACEABLE RAG CARDS) */}
                     {msg.structuredResponse.sources && msg.structuredResponse.sources.length > 0 && (
                       <div className="pt-2">
                         <div className="flex items-center justify-between mb-2.5">
@@ -682,7 +926,7 @@ export const AIAssistant: React.FC = () => {
                           {msg.structuredResponse.sources.map(src => (
                             <div
                               key={src.id}
-                              className="p-3 bg-white rounded-xl border border-stone-200 hover:border-emerald-400 hover:shadow-xs transition-all flex flex-col justify-between group"
+                              className="p-3 bg-white rounded-xl border border-stone-200 hover:border-emerald-400 hover:shadow-2xs transition-all flex flex-col justify-between group"
                             >
                               <div>
                                 <div className="flex items-center justify-between gap-1 mb-1">
@@ -715,7 +959,7 @@ export const AIAssistant: React.FC = () => {
                                       confidence: msg.structuredResponse?.confidence || 'high'
                                     })
                                   }
-                                  className="font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-0.5 transition-colors"
+                                  className="font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-0.5 transition-colors cursor-pointer"
                                 >
                                   <span>View Provenance</span>
                                   <ExternalLink className="w-2.5 h-2.5" />
@@ -727,16 +971,16 @@ export const AIAssistant: React.FC = () => {
                       </div>
                     )}
 
-                    {/* 9. CONFIDENCE SYSTEM & STATUTORY DISCLAIMER */}
+                    {/* 8. CONFIDENCE SYSTEM & STATUTORY DISCLAIMER */}
                     <div className="p-3 bg-stone-100/70 border border-stone-200/80 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-white border border-stone-200 flex items-center justify-center text-emerald-800 font-black text-xs">
-                          {msg.structuredResponse.confidenceScore || 88}%
+                          {msg.structuredResponse.confidenceScore || 90}%
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className="font-bold text-stone-900 text-xs">
-                              AI Confidence Score: {msg.structuredResponse.confidenceScore || 88}%
+                              AI Confidence Score: {msg.structuredResponse.confidenceScore || 90}%
                             </span>
                             <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-emerald-100 text-emerald-800 uppercase">
                               High Confidence
@@ -770,7 +1014,7 @@ export const AIAssistant: React.FC = () => {
                             );
                             showToast('Saved to Saved Reports', 'Consultation saved for dossier export', 'success');
                           }}
-                          className="hover:text-emerald-800 flex items-center gap-1 font-medium transition-colors"
+                          className="hover:text-emerald-800 flex items-center gap-1 font-medium transition-colors cursor-pointer"
                         >
                           <Bookmark className="w-3.5 h-3.5" />
                           <span>Save Consultation</span>
@@ -781,15 +1025,15 @@ export const AIAssistant: React.FC = () => {
                             navigator.clipboard?.writeText(msg.text);
                             showToast('Copied analysis to clipboard', undefined, 'info');
                           }}
-                          className="hover:text-emerald-800 flex items-center gap-1 font-medium transition-colors"
+                          className="hover:text-emerald-800 flex items-center gap-1 font-medium transition-colors cursor-pointer"
                         >
                           <Share2 className="w-3.5 h-3.5" />
                           <span>Copy Analysis</span>
                         </button>
                         <span>•</span>
                         <button
-                          onClick={() => handleSend(messages[mIdx - 1]?.text || 'Deepen the Section 3(p) analysis')}
-                          className="hover:text-emerald-800 flex items-center gap-1 font-medium transition-colors"
+                          onClick={() => handleSend(messages[mIdx - 1]?.text || 'Explain Section 3(p) of the Indian Patents Act')}
+                          className="hover:text-emerald-800 flex items-center gap-1 font-medium transition-colors cursor-pointer"
                         >
                           <RefreshCw className="w-3.5 h-3.5" />
                           <span>Regenerate</span>
@@ -798,7 +1042,7 @@ export const AIAssistant: React.FC = () => {
 
                       <button
                         onClick={() => navigate('/reports')}
-                        className="font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1"
+                        className="font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 cursor-pointer"
                       >
                         <span>Export Full IP Dossier</span>
                         <ChevronRight className="w-3 h-3" />
@@ -818,7 +1062,7 @@ export const AIAssistant: React.FC = () => {
               <div className="w-2 h-2 rounded-full bg-emerald-700 animate-bounce delay-100" />
               <div className="w-2 h-2 rounded-full bg-emerald-700 animate-bounce delay-200" />
               <span className="text-xs text-stone-600 font-medium ml-1">
-                Searching Patents Act, TKDL records & Biological Diversity Act...
+                Synthesizing Patents Act, TKDL & Biological Diversity Act...
               </span>
             </div>
           )}
@@ -827,7 +1071,7 @@ export const AIAssistant: React.FC = () => {
         </div>
 
         {/* Suggested Prompts Pills */}
-        <div className="px-4 py-2 bg-stone-50/80 border-t border-stone-100 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0">
+        <div className="px-4 py-2.5 bg-stone-50/80 border-t border-stone-100 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0">
           <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider shrink-0 flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-emerald-700" /> Suggested:
           </span>
@@ -835,14 +1079,14 @@ export const AIAssistant: React.FC = () => {
             <button
               key={idx}
               onClick={() => handleSend(p)}
-              className="shrink-0 text-xs px-2.5 py-1 bg-white hover:bg-emerald-50 hover:border-emerald-300 text-stone-700 hover:text-emerald-900 border border-stone-200 rounded-lg transition-all"
+              className="shrink-0 text-xs px-3 py-1.5 bg-white hover:bg-emerald-50 hover:border-emerald-400 text-stone-700 hover:text-emerald-900 border border-stone-200 rounded-lg transition-all cursor-pointer font-medium shadow-2xs"
             >
               {p}
             </button>
           ))}
         </div>
 
-        {/* Large ChatGPT-Style Chat Input Box */}
+        {/* Large Chat Input Box */}
         <div className="p-3 sm:p-4 border-t border-stone-200 bg-white shrink-0">
           <div className="relative rounded-2xl border-2 border-stone-300/80 focus-within:border-emerald-700 focus-within:ring-4 focus-within:ring-emerald-600/10 shadow-sm bg-stone-50/60 transition-all">
             
@@ -857,7 +1101,7 @@ export const AIAssistant: React.FC = () => {
                     <button
                       key={code}
                       onClick={() => setLanguage(code)}
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
                         language === code
                           ? 'bg-emerald-800 text-white shadow-2xs'
                           : 'text-stone-600 hover:text-stone-900'
@@ -885,7 +1129,7 @@ export const AIAssistant: React.FC = () => {
                   handleSend();
                 }
               }}
-              placeholder="Describe your Ayurvedic product, formulation or IP question... (e.g. 'I developed a new Ayurvedic formulation using Ashwagandha and Turmeric. Can I patent it?')"
+              placeholder="Describe your Ayurvedic product, formulation or IP question... (e.g. 'Can my Ayurvedic formulation be patented?')"
               className="w-full bg-transparent px-4 py-3 text-xs sm:text-sm text-stone-900 placeholder-stone-400 focus:outline-hidden resize-none leading-relaxed"
             />
 
@@ -896,7 +1140,7 @@ export const AIAssistant: React.FC = () => {
                 <button
                   type="button"
                   onClick={toggleMic}
-                  className={`p-2 rounded-xl border transition-all flex items-center gap-1.5 text-xs font-semibold ${
+                  className={`p-2 rounded-xl border transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer ${
                     isListening
                       ? 'bg-rose-600 text-white border-rose-700 animate-pulse'
                       : 'bg-white hover:bg-stone-100 border-stone-200 text-stone-700'
@@ -911,7 +1155,7 @@ export const AIAssistant: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => showToast('Formulation sheet attached', 'Analyzing ingredients for Section 3(p) & TKDL...', 'info')}
-                  className="p-2 rounded-xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-700 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+                  className="p-2 rounded-xl border border-stone-200 bg-white hover:bg-stone-100 text-stone-700 transition-colors flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
                   title="Attach formulation specification sheet or patent draft"
                 >
                   <Paperclip className="w-3.5 h-3.5" />
@@ -923,7 +1167,7 @@ export const AIAssistant: React.FC = () => {
               <button
                 onClick={() => handleSend()}
                 disabled={!inputText.trim()}
-                className="px-5 py-2 bg-emerald-800 hover:bg-emerald-900 disabled:opacity-40 text-white rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm"
+                className="px-5 py-2 bg-emerald-800 hover:bg-emerald-900 disabled:opacity-40 text-white rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm cursor-pointer"
               >
                 <span>Ask IP-SAKTI</span>
                 <Send className="w-3.5 h-3.5" />
